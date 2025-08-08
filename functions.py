@@ -31,3 +31,30 @@ def normalize_fullname(fullname: str) -> str:
 def normalize_amount(amount: str) -> float:
     cleaned = amount.strip().replace(' ', '').replace(',', '.')
     return float(cleaned)
+
+
+def normalize_data(data: list[dict]) -> list[dict]:
+    normalized = []
+    for row in data:
+        normalized.append({
+            "phone": normalize_phone(row["phone"]),
+            "fullname": normalize_fullname(row["fullname"]),
+            "amount": normalize_amount(row["amount"]),
+            "rating": row["rating"]
+        })
+    return normalized
+
+
+def parse_csv_string(csv_str: str) -> list[dict]:
+    lines = csv_str.strip().split('\n')
+    if not lines:
+        return []
+    headers = [h.strip() for h in lines[0].split(',')]
+    rows = []
+    for line in lines[1:]:
+        values = [v.strip() for v in line.split(',', len(headers) - 1)]
+        if len(values) < len(headers):
+            values += [''] * (len(headers) - len(values))
+        row = dict(zip(headers, values))
+        rows.append(row)
+    return rows

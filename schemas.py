@@ -1,19 +1,25 @@
+from enum import Enum
+from pydantic import BaseModel
 
-from pydantic import BaseModel, Field
 
-
-class PersonBase(BaseModel):
+class Person(BaseModel):
     phone: str
     fullname: str
     amount: str
     rating: int
 
-class PersonCreate(PersonBase):
-    pass
 
-class Person(PersonBase):
+class PersonOut(Person):
     amount: float
-    
-    class Config:
-        orm_mode = True
 
+
+class SortField(str, Enum):
+    phone = "phone"
+    fullname = "fullname"
+    amount = "amount"
+    rating = "rating"
+
+
+class SortOrder(str, Enum):
+    asc = "asc"
+    desc = "desc"
